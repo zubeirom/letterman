@@ -1,11 +1,7 @@
 import {Controller, Body, Post, Get, Param, Delete} from '@nestjs/common';
 import {LetterService} from "./letter.service";
 
-// TODO: Create POST /letters
-// TODO: Create GET /letters
-// TODO: Create GET /letter/:id
 // TODO: Create PUT letters/:id
-// TODO: Create DELETE letter/:id
 
 @Controller('letters')
 export class LetterController {

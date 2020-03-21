@@ -4,9 +4,6 @@ import { Model } from 'mongoose';
 import { Letter } from './interfaces/letter.interface';
 
 // TODO: Create update letter
-// TODO: Create get letter by id
-// TODO: Create delete letter
-// TODO: Create find letter function
 
 @Injectable()
 export class LetterService {
@@ -15,8 +12,7 @@ export class LetterService {
 
     async create(letterDto) {
         try {
-            const { letter } = letterDto;
-            const newLetter = new this.letterModel({ ...letter, createdAt: new Date(), updatedAt: new Date() })
+            const newLetter = new this.letterModel({ ...letterDto, createdAt: new Date(), updatedAt: new Date() })
             return await newLetter.save();
         } catch (e) {
             throw e;
@@ -25,7 +21,7 @@ export class LetterService {
 
     async get() {
         try {
-            return this.letterModel.find().exec();
+            return this.letterModel.find().populate("account").exec();
         }catch (e) {
             throw e
         }
