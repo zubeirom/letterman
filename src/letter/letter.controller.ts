@@ -7,7 +7,7 @@ import {LetterService} from "./letter.service";
 // TODO: Create PUT letters/:id
 // TODO: Create DELETE letter/:id
 
-@Controller('letter')
+@Controller('letters')
 export class LetterController {
     constructor(private readonly letterService: LetterService) {}
 
