@@ -7,8 +7,7 @@ import { Letter } from './interfaces/letter.interface';
 
 @Injectable()
 export class LetterService {
-    constructor(@InjectModel('Letter') private readonly letterModel: Model<Letter>) {
-    }
+    constructor(@InjectModel('Letter') private readonly letterModel: Model<Letter>) {}
 
     async create(letterDto) {
         try {
