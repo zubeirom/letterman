@@ -36,6 +36,7 @@ module.exports = {
     "max-len": 0,
     "no-useless-constructor": 0,
     "new-cap": 0,
-    "no-useless-catch": 0
+    "no-useless-catch": 0,
+    "class-methods-use-this": 0,
   },
 };

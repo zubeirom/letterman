@@ -31,6 +31,18 @@ export class AccountService {
         }
     }
 
+    async findAccountByEmail(email: string) {
+        try {
+            const account = await this.accountModel.find({email});
+            if(!account) {
+                return null;
+            }
+            return account;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async findAccount(accountId: string) {
         try {
             const account = await this.accountModel.findOne(accountId);

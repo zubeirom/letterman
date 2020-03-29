@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export const AccountSchema = new mongoose.Schema({
+    providerId: String,
     email: {
         type: String,
         required: true
