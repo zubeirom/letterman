@@ -1,4 +1,5 @@
 import {Controller, Get, Res} from '@nestjs/common';
+import { Response } from 'express';
 import {AppService} from './app.service';
 
 require('dotenv').config();
@@ -10,13 +11,13 @@ export class AppController {
 
     @Get('.well-known/microsoft-identity-association.json')
     publisherDomain(@Res() res: Response) {
-        res.headers.set('Content-Type', 'application/json');
-        return {
-            "associatedApplications": [
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({
+            associatedApplications: [
                 {
-                    "applicationId": process.env.AZURE_APPLICATION_ID
+                    applicationId: process.env.AZURE_APPLICATION_ID
                 }
             ]
-        }
+        }));
     }
 }
