@@ -1,4 +1,4 @@
-import {Controller, Get} from '@nestjs/common';
+import {Controller, Get, Res} from '@nestjs/common';
 import {AppService} from './app.service';
 
 require('dotenv').config();
@@ -9,8 +9,8 @@ export class AppController {
     }
 
     @Get('.well-known/microsoft-identity-association.json')
-    publisherDomain() {
-        console.log("dsmocmspdcom");
+    publisherDomain(@Res() res: Response) {
+        res.headers.set('Content-Type', 'application/json');
         return {
             "associatedApplications": [
                 {
