@@ -11,16 +11,16 @@ export class LetterService {
 
     async create(letterDto) {
         try {
-            const newLetter = new this.letterModel({ ...letterDto, createdAt: new Date(), updatedAt: new Date() })
-            return await newLetter.save();
+            const newLetter = new this.letterModel({ ...letterDto, createdAt: new Date(), updatedAt: new Date() });
+            return newLetter.save();
         } catch (e) {
             throw e;
         }
     }
 
-    async get() {
+    async get(uid: string) {
         try {
-            return this.letterModel.find().populate("account").exec();
+            return this.letterModel.find({uid}).exec();
         }catch (e) {
             throw e
         }
@@ -37,7 +37,7 @@ export class LetterService {
     async delete(letterId: string) {
         try {
             if(await this.findLetter(letterId)) {
-                await this.letterModel.deleteOne({letterId}).exec()
+                this.letterModel.deleteOne({letterId}).exec()
             }
         } catch (e) {
             throw e;
@@ -47,7 +47,7 @@ export class LetterService {
 
     async findLetter(letterId: string) {
         try {
-            const letter = await this.letterModel.findOne(letterId);
+            const letter = this.letterModel.findOne(letterId);
             if(!letter) {
                 throw new NotFoundException('Letter Not Found')
             }

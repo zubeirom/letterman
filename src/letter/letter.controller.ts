@@ -1,5 +1,6 @@
-import {Controller, Body, Post, Get, Param, Delete} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers, UnauthorizedException} from '@nestjs/common';
 import {LetterService} from "./letter.service";
+import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 
 // TODO: Create PUT letters/:id
 
@@ -11,10 +12,10 @@ export class LetterController {
     async create(@Body() createLetterDto) {
         return { letter: await this.letterService.create(createLetterDto)}
     }
-
+    
     @Get()
-    async get() {
-        return {letters: await this.letterService.get()};
+    async get(@Headers("authorization") authHeader) {
+        return {letters: await this.letterService.get(authHeader.split(' ')[1])};
     }
 
     @Get(':id')

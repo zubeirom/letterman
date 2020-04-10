@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface Letter extends Document {
-    account,
+    uid: string,
     title: string,
     content: string,
     imageUrl: string,
