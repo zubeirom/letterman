@@ -1,13 +1,22 @@
 import {Controller, Get} from '@nestjs/common';
 import {AppService} from './app.service';
 
+require('dotenv').config();
+
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) {
     }
 
-    @Get()
-    getHello(): string {
-        return this.appService.getHello();
+    @Get('.well-known/microsoft-identity-association.json')
+    publisherDomain() {
+        console.log("dsmocmspdcom");
+        return {
+            "associatedApplications": [
+                {
+                    "applicationId": process.env.AZURE_APPLICATION_ID
+                }
+            ]
+        }
     }
 }

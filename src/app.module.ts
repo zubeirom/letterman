@@ -6,6 +6,7 @@ import {LetterModule} from './letter/letter.module';
 import {AccountModule} from './account/account.module';
 import {AuthModule} from './auth/auth.module';
 import {AuthMiddleware} from "./middlewares/auth.middleware";
+import {LetterController} from "./letter/letter.controller";
 
 require('dotenv').config();
 
@@ -18,6 +19,9 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): any {
         consumer
             .apply(AuthMiddleware)
-            .forRoutes({path: '*', method: RequestMethod.ALL})
+            .exclude(
+                { path: '.well-known', method: RequestMethod.GET },
+            )
+            .forRoutes(LetterController)
     }
 }
