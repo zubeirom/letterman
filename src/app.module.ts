@@ -11,7 +11,7 @@ import {LetterController} from "./letter/letter.controller";
 require('dotenv').config();
 
 @Module({
-    imports: [LetterModule, AccountModule, AuthModule],
+    imports: [LetterModule, MongooseModule.forRoot(process.env.PROD_DB), AccountModule, AuthModule],
     controllers: [AppController],
     providers: [AppService],
 })
