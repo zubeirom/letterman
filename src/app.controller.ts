@@ -13,9 +13,9 @@ export class AppController {
     publisherDomain(@Res() res: Response) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({
-            associatedApplications: [
+            "associatedApplications": [
                 {
-                    applicationId: process.env.AZURE_APPLICATION_ID
+                    "applicationId": process.env.AZURE_APPLICATION_ID
                 }
             ]
         }));
