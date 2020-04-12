@@ -47,7 +47,7 @@ export class LetterService {
 
     async findLetter(letterId: string) {
         try {
-            const letter = this.letterModel.findOne(letterId);
+            const letter = this.letterModel.findById(letterId);
             if(!letter) {
                 throw new NotFoundException('Letter Not Found')
             }

@@ -4,7 +4,7 @@ import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 
 // TODO: Create PUT letters/:id
 
-@Controller('api/letters')
+@Controller('letters')
 export class LetterController {
     constructor(private readonly letterService: LetterService) {}
 

@@ -1,5 +1,6 @@
 import {MiddlewareConsumer, Module, NestModule, RequestMethod,} from '@nestjs/common';
 import {MongooseModule} from '@nestjs/mongoose';
+import {MulterModule} from "@nestjs/platform-express";
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {LetterModule} from './letter/letter.module';
@@ -11,7 +12,7 @@ import {LetterController} from "./letter/letter.controller";
 require('dotenv').config();
 
 @Module({
-    imports: [LetterModule, MongooseModule.forRoot(process.env.PROD_DB), AccountModule, AuthModule],
+    imports: [LetterModule, MongooseModule.forRoot(process.env.LOCAL_DB), AccountModule, AuthModule],
     controllers: [AppController],
     providers: [AppService],
 })
@@ -19,9 +20,6 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): any {
         consumer
             .apply(AuthMiddleware)
-            .exclude(
-                { path: '.well-known', method: RequestMethod.GET },
-            )
             .forRoutes(LetterController)
     }
 }
