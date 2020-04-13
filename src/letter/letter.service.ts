@@ -1,29 +1,42 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Letter } from './interfaces/letter.interface';
+import {InjectModel} from '@nestjs/mongoose';
+import {Model} from 'mongoose';
+import {Letter} from './interfaces/letter.interface';
 import {imageToText} from "../common/common.service";
 
 // TODO: Create update letter
 
 @Injectable()
 export class LetterService {
-    constructor(@InjectModel('Letter') private readonly letterModel: Model<Letter>) {}
+    constructor(@InjectModel('Letter') private readonly letterModel: Model<Letter>) {
+    }
 
     async create(letterDto) {
         try {
             const content = await imageToText(letterDto.imageUrl);
-            const newLetter = new this.letterModel({ ...letterDto, content, createdAt: new Date(), updatedAt: new Date() });
+            const newLetter = new this.letterModel({
+                ...letterDto,
+                content,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
             return newLetter.save();
         } catch (e) {
             throw e;
         }
     }
 
-    async get(uid: string) {
+    async get(uid: string, searchValue: string) {
         try {
+            if (searchValue) {
+                return this.letterModel.find({
+                    uid,
+                    title: {"$regex": searchValue, "$options": "i"},
+                }).sort('-updatedAt').exec();
+            }
             return this.letterModel.find({uid}).sort('-updatedAt').exec();
-        }catch (e) {
+
+        } catch (e) {
             throw e
         }
     }
@@ -38,8 +51,8 @@ export class LetterService {
 
     async delete(letterId: string) {
         try {
-            if(await this.findLetter(letterId)) {
-                this.letterModel.deleteOne({letterId}).exec()
+            if (await this.findLetter(letterId)) {
+                this.letterModel.deleteOne({_id: letterId}).exec()
             }
         } catch (e) {
             throw e;
@@ -49,7 +62,7 @@ export class LetterService {
 
     async update(letterId, body) {
         try {
-            const { title, content, label } = body.letter;
+            const {title, content, label} = body.letter;
             const letter = await this.findLetter(letterId);
             letter.title = title;
             letter.content = content;
@@ -64,11 +77,11 @@ export class LetterService {
     async findLetter(letterId: string) {
         try {
             const letter = this.letterModel.findById(letterId);
-            if(!letter) {
+            if (!letter) {
                 throw new NotFoundException('Letter Not Found')
             }
             return letter;
-        } catch(e) {
+        } catch (e) {
             throw e;
         }
     }

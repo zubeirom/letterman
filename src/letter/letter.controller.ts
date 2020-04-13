@@ -1,4 +1,4 @@
-import {Controller, Body, Post, Get, Param, Delete, Headers, Put} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers, Put, Query} from '@nestjs/common';
 import {LetterService} from "./letter.service";
 import {getUID} from "../utils/index.utils";
 
@@ -12,8 +12,8 @@ export class LetterController {
     }
     
     @Get()
-    async get(@Headers("authorization") authHeader) {
-        return {letters: await this.letterService.get(getUID(authHeader))};
+    async get(@Headers("authorization") authHeader, @Query('search') searchValue) {
+        return {letters: await this.letterService.get(getUID(authHeader), searchValue)};
     }
 
     @Get(':id')
