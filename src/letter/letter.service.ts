@@ -47,6 +47,20 @@ export class LetterService {
 
     }
 
+    async update(letterId, body) {
+        try {
+            const { title, content, label } = body.letter;
+            const letter = await this.findLetter(letterId);
+            letter.title = title;
+            letter.content = content;
+            letter.label = label;
+            letter.updatedAt = new Date();
+            return letter.save();
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async findLetter(letterId: string) {
         try {
             const letter = this.letterModel.findById(letterId);

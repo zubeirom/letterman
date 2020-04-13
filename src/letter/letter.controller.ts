@@ -1,4 +1,4 @@
-import {Controller, Body, Post, Get, Param, Delete, Headers} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers, Put} from '@nestjs/common';
 import {LetterService} from "./letter.service";
 import {getUID} from "../utils/index.utils";
 
@@ -26,4 +26,10 @@ export class LetterController {
         await this.letterService.delete(letterId);
         return {}
     }
+
+    @Put(':id')
+    async update(@Param("id") letterId: string, @Body() body) {
+        return {packet: await this.letterService.update(letterId, body)}
+    }
+
 }

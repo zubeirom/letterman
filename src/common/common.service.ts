@@ -9,5 +9,5 @@ const client = new vision.ImageAnnotatorClient({
 export const imageToText = async (fileName) => {
     const [result] = await client.textDetection(`gs://${process.env.G_BUCKET_NAME}/${fileName}`);
     const detections = result.textAnnotations;
-    return detections[0].description;
+    return detections[0].description.replace(/\n/g, "<br />")
 };
