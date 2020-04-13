@@ -12,7 +12,7 @@ import {LabelModule} from "./label/label.module";
 require('dotenv').config();
 
 @Module({
-    imports: [LetterModule, MongooseModule.forRoot(process.env.LOCAL_DB), AccountModule, AuthModule, LabelModule],
+    imports: [LetterModule, MongooseModule.forRoot(process.env.PROD_DB), AccountModule, AuthModule, LabelModule],
     controllers: [AppController],
     providers: [AppService],
 })
