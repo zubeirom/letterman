@@ -1,21 +1,19 @@
-import {Controller, Body, Post, Get, Param, Delete, Headers, UnauthorizedException} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers} from '@nestjs/common';
 import {LetterService} from "./letter.service";
-import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
-
-// TODO: Create PUT letters/:id
+import {getUID} from "../utils/index.utils";
 
 @Controller('letters')
 export class LetterController {
     constructor(private readonly letterService: LetterService) {}
 
     @Post()
-    async create(@Body() createLetterDto) {
-        return { letter: await this.letterService.create(createLetterDto)}
+    async create(@Body() createLetterDto, @Headers("authorization") authHeader) {
+        return { letter: await this.letterService.create({...createLetterDto.letter, uid: getUID(authHeader)})}
     }
     
     @Get()
     async get(@Headers("authorization") authHeader) {
-        return {letters: await this.letterService.get(authHeader.split(' ')[1])};
+        return {letters: await this.letterService.get(getUID(authHeader))};
     }
 
     @Get(':id')

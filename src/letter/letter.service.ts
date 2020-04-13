@@ -2,6 +2,7 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Letter } from './interfaces/letter.interface';
+import {imageToText} from "../common/common.service";
 
 // TODO: Create update letter
 
@@ -11,7 +12,8 @@ export class LetterService {
 
     async create(letterDto) {
         try {
-            const newLetter = new this.letterModel({ ...letterDto, createdAt: new Date(), updatedAt: new Date() });
+            const content = await imageToText(letterDto.imageUrl);
+            const newLetter = new this.letterModel({ ...letterDto, content, createdAt: new Date(), updatedAt: new Date() });
             return newLetter.save();
         } catch (e) {
             throw e;
@@ -20,7 +22,7 @@ export class LetterService {
 
     async get(uid: string) {
         try {
-            return this.letterModel.find({uid}).exec();
+            return this.letterModel.find({uid}).sort('-updatedAt').exec();
         }catch (e) {
             throw e
         }

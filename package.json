@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^4.7.0",
+    "@google-cloud/vision": "^1.11.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/jwt": "^7.0.0",
