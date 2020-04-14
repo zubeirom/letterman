@@ -1,12 +1,13 @@
-import {Controller, Get, Param} from '@nestjs/common';
+import {Controller, Get, Headers, Param} from '@nestjs/common';
 import {AccountService} from "./account.service";
+import {getUID} from "../utils/index.utils";
 
 @Controller('accounts')
 export class AccountController {
     constructor(private readonly accountService: AccountService) {}
 
-    @Get(':id')
-    async get(@Param("id") accountId: string) {
-        return {account: await this.accountService.getOne(accountId)}
+    @Get('delete')
+    async get(@Headers('authorization') authHeader) {
+        return this.accountService.deleteAccount(getUID(authHeader));
     }
 }

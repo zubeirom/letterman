@@ -9,6 +9,7 @@ import {LetterSchema} from "../letter/schemas/letter.schema";
     imports: [MongooseModule.forFeature([{ name: 'Label', schema: LabelSchema }, {name: 'Letter', schema: LetterSchema}])],
     controllers: [LabelController],
     providers: [LabelService],
+    exports: [LabelService]
 })
 export class LabelModule {
 }

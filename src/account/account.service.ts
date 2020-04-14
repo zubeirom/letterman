@@ -1,55 +1,38 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectModel} from "@nestjs/mongoose";
-import { Model } from 'mongoose';
+import {Model} from 'mongoose';
+import {Letter} from 'src/letter/interfaces/letter.interface';
+import {Storage} from "@google-cloud/storage";
+import {LetterService} from "../letter/letter.service";
+import {LabelService} from "../label/label.service";
+
+require('dotenv').config();
 
 @Injectable()
 export class AccountService {
-    constructor(@InjectModel('Account') private readonly accountModel: Model<Account>) {}
-
-    async create(accountDto) {
-        try {
-            const newAccount = new this.accountModel({...accountDto, createdAt: new Date(), updatedAt: new Date()})
-            return await newAccount.save();
-        } catch (e) {
-            throw e;
-        }
+    constructor(@InjectModel('Account') private readonly accountModel: Model<Account>, private readonly letterService: LetterService, private readonly labelService: LabelService) {
     }
 
-    async get() {
-        try {
-            return this.accountModel.find().exec();
-        } catch (e) {
-            throw e;
-        }
-    }
+    storage = new Storage({
+        projectId: process.env.G_PROJECT_ID,
+        keyFilename: process.env.GOOGLE_CRED
+    });
 
-    async getOne(accountId: string) {
-        try {
-            return await this.findAccount(accountId);
-        } catch (e) {
-            throw e;
-        }
-    }
+    bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
 
-    async findAccountByEmail(email: string) {
+    async deleteAccount(uid: string) {
         try {
-            const account = await this.accountModel.find({email});
-            if(!account) {
-                return null;
+            const letters = await this.letterService.get(uid, "");
+            await this.labelService.deleteAll(uid);
+            // eslint-disable-next-line no-restricted-syntax
+            for (const letter of letters) {
+                try {
+                    // eslint-disable-next-line no-underscore-dangle
+                    this.letterService.delete(letter._id)
+                } catch (e) {
+                    throw e;
+                }
             }
-            return account;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    async findAccount(accountId: string) {
-        try {
-            const account = await this.accountModel.findOne(accountId);
-            if(!account) {
-                throw new NotFoundException('Account Not Found')
-            }
-            return account;
         } catch (e) {
             throw e;
         }

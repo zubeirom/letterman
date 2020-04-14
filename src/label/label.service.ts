@@ -43,4 +43,12 @@ export class LabelService {
             throw e;
         }
     }
+
+    async deleteAll(uid: string) {
+        try {
+            await this.labelModel.deleteMany({uid});
+        } catch (e) {
+            throw e;
+        }
+    }
 }

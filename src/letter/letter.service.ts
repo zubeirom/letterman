@@ -3,6 +3,7 @@ import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import {Letter} from './interfaces/letter.interface';
 import {imageToText} from "../common/common.service";
+import {Storage} from "@google-cloud/storage";
 
 // TODO: Create update letter
 
@@ -10,6 +11,13 @@ import {imageToText} from "../common/common.service";
 export class LetterService {
     constructor(@InjectModel('Letter') private readonly letterModel: Model<Letter>) {
     }
+
+    storage = new Storage({
+        projectId: process.env.G_PROJECT_ID,
+        keyFilename: process.env.GOOGLE_CRED
+    });
+
+    bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
 
     async create(letterDto) {
         try {
@@ -51,8 +59,11 @@ export class LetterService {
 
     async delete(letterId: string) {
         try {
-            if (await this.findLetter(letterId)) {
-                this.letterModel.deleteOne({_id: letterId}).exec()
+            const letter = await this.findLetter(letterId);
+            if(letter) {
+                await this.bucket.file(letter.imageUrl).delete();
+                await letter.remove();
+                console.log('finished')
             }
         } catch (e) {
             throw e;

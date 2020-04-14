@@ -8,6 +8,7 @@ import { LetterService } from './letter.service';
     imports: [MongooseModule.forFeature([{ name: 'Letter', schema: LetterSchema }])],
     controllers: [LetterController],
     providers: [LetterService],
+    exports: [LetterService]
 })
 export class LetterModule {
 }
