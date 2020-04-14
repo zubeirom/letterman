@@ -1,11 +1,11 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
+import {Storage} from "@google-cloud/storage";
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import {Letter} from './interfaces/letter.interface';
 import {imageToText} from "../common/common.service";
-import {Storage} from "@google-cloud/storage";
-
-// TODO: Create update letter
 
 @Injectable()
 export class LetterService {
@@ -21,7 +21,8 @@ export class LetterService {
 
     async create(letterDto) {
         try {
-            const content = await imageToText(letterDto.imageUrl);
+            const processed = await imageToText(letterDto.imageUrl);
+            const content = await jwt.sign(processed, process.env.PRIVATE_KEY);
             const newLetter = new this.letterModel({
                 ...letterDto,
                 content,
@@ -37,7 +38,7 @@ export class LetterService {
     async get(uid: string, searchValue: string) {
         try {
             if (searchValue) {
-                return this.letterModel.find({
+                const letters = this.letterModel.find({
                     uid,
                     title: {"$regex": searchValue, "$options": "i"},
                 }).sort('-updatedAt').exec();
@@ -51,7 +52,9 @@ export class LetterService {
 
     async getOne(letterId: string) {
         try {
-            return await this.findLetter(letterId);
+            const letter = await this.findLetter(letterId);
+            letter.content = await jwt.verify(letter.content, process.env.PRIVATE_KEY);
+            return letter;
         } catch (e) {
             throw e;
         }
@@ -63,7 +66,6 @@ export class LetterService {
             if(letter) {
                 await this.bucket.file(letter.imageUrl).delete();
                 await letter.remove();
-                console.log('finished')
             }
         } catch (e) {
             throw e;

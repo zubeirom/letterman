@@ -2,7 +2,9 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import {Letter} from 'src/letter/interfaces/letter.interface';
+import * as jwt from 'jsonwebtoken';
 import {Label} from './interfaces/label.interface';
+
 
 @Injectable()
 export class LabelService {
