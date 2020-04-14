@@ -1,7 +1,9 @@
-import {Controller, Body, Post, Get, Param, Delete, Headers, Put, Query} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers, Put, Query, UseInterceptors} from '@nestjs/common';
 import {LetterService} from "./letter.service";
 import {getUID} from "../utils/index.utils";
+import {SentryInterceptor} from "../interceptors/sentry.interceptor";
 
+@UseInterceptors(SentryInterceptor)
 @Controller('letters')
 export class LetterController {
     constructor(private readonly letterService: LetterService) {}

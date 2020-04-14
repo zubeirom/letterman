@@ -1,7 +1,9 @@
-import {Controller, Body, Post, Get, Param, Delete, Headers, Head} from '@nestjs/common';
+import {Controller, Body, Post, Get, Param, Delete, Headers, Head, UseInterceptors} from '@nestjs/common';
 import { LabelService } from './label.service';
 import {getUID} from "../utils/index.utils";
+import {SentryInterceptor} from "../interceptors/sentry.interceptor";
 
+@UseInterceptors(SentryInterceptor)
 @Controller('labels')
 export class LabelController {
     constructor(private readonly labelService: LabelService) {}

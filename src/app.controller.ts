@@ -4,9 +4,11 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Storage } from '@google-cloud/storage';
 import * as fs from 'fs';
 import {AppService} from './app.service';
+import {SentryInterceptor} from "./interceptors/sentry.interceptor";
 
 require('dotenv').config();
 
+@UseInterceptors(SentryInterceptor)
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) {
