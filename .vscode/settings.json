@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/3482185e-6202-46f2-8290-d45e98fca023/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/api-letterman",
+    "appService.deploySubpath": ""
+}
