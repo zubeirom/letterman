@@ -8,6 +8,7 @@ import {AuthModule} from './auth/auth.module';
 import {AuthMiddleware} from "./middlewares/auth.middleware";
 import {LetterController} from "./letter/letter.controller";
 import {LabelModule} from "./label/label.module";
+import {LabelController} from "./label/label.controller";
 
 require('dotenv').config();
 
@@ -20,6 +21,6 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): any {
         consumer
             .apply(AuthMiddleware)
-            .forRoutes(LetterController, LabelModule)
+            .forRoutes(LetterController, LabelController, AppController)
     }
 }
