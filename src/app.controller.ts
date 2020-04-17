@@ -14,7 +14,6 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Storage } from '@google-cloud/storage';
 import {AppService} from './app.service';
 import {SentryInterceptor} from "./interceptors/sentry.interceptor";
-import {validateToken} from "./utils/index.utils";
 
 require('dotenv').config();
 
@@ -32,9 +31,8 @@ export class AppController {
     bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
 
     @Get('stream')
-    async streamImage(@Query("fileName") fileName: string , @Query('token') token: string, @Res() res: Response) {
+    async streamImage(@Query("fileName") fileName: string ,  @Res() res: Response) {
         try {
-            await validateToken(token);
             const [file] = await this.appService.streamImage(fileName);
             res.end(file, 'binary');
         } catch (e) {
