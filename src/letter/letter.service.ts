@@ -21,11 +21,14 @@ export class LetterService {
 
     async create(letterDto) {
         try {
+            const { imageUrl } = letterDto;
             const processed = await imageToText(letterDto.imageUrl);
-            const content = await jwt.sign(processed, process.env.PRIVATE_KEY);
+            const tokenzizedContent = await jwt.sign(processed, process.env.PRIVATE_KEY);
+            const tokenizedUrl = await jwt.sign(imageUrl, process.env.PRIVATE_KEY);
             const newLetter = new this.letterModel({
                 ...letterDto,
-                content,
+                imageUrl: tokenizedUrl,
+                content: tokenzizedContent,
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
@@ -54,6 +57,7 @@ export class LetterService {
         try {
             const letter = await this.findLetter(letterId);
             letter.content = await jwt.verify(letter.content, process.env.PRIVATE_KEY);
+            letter.imageUrl = await jwt.verify(letter.imageUrl, process.env.PRIVATE_KEY);
             return letter;
         } catch (e) {
             throw e;
