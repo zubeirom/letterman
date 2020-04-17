@@ -76,9 +76,10 @@ export class LetterService {
     async update(letterId, body) {
         try {
             const {title, content, label} = body.letter;
+            const tokenized = await jwt.sign(content, process.env.PRIVATE_KEY);
             const letter = await this.findLetter(letterId);
             letter.title = title;
-            letter.content = content;
+            letter.content = tokenized;
             letter.label = label;
             letter.updatedAt = new Date();
             return letter.save();
