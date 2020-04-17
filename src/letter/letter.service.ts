@@ -38,7 +38,7 @@ export class LetterService {
     async get(uid: string, searchValue: string) {
         try {
             if (searchValue) {
-                const letters = this.letterModel.find({
+                return this.letterModel.find({
                     uid,
                     title: {"$regex": searchValue, "$options": "i"},
                 }).sort('-updatedAt').exec();
