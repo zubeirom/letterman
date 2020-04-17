@@ -32,13 +32,8 @@ export class AppController {
 
     @Get('stream')
     async streamImage(@Query("fileName") fileName: string ,  @Res() res: Response) {
-        try {
-            const [file] = await this.appService.streamImage(fileName);
-            res.end(file, 'binary');
-        } catch (e) {
-            console.error(e);
-            throw new UnauthorizedException('Unauthorized Request');
-        }
+        const [file] = await this.appService.streamImage(fileName);
+        res.end(file, 'binary');
     }
 
     @Get('.well-known/microsoft-identity-association.json')
