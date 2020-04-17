@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "npm run build && now --prod"
+    "deploy": "npm run build && now && now --prod"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.7.0",
