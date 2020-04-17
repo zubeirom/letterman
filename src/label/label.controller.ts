@@ -1,26 +1,37 @@
 import {Controller, Body, Post, Get, Param, Delete, Headers, Head, UseInterceptors} from '@nestjs/common';
-import { LabelService } from './label.service';
-import {getUID} from "../utils/index.utils";
+import {LabelService} from './label.service';
 import {SentryInterceptor} from "../interceptors/sentry.interceptor";
+import {validateAndGetUid} from "../utils/index.utils";
 
 @UseInterceptors(SentryInterceptor)
 @Controller('labels')
 export class LabelController {
-    constructor(private readonly labelService: LabelService) {}
+    constructor(private readonly labelService: LabelService) {
+    }
 
     @Get()
-    async get(@Headers('authorization') authHeader){
+    async get(@Headers('authorization') authHeader) {
         return {labels: await this.labelService.get(authHeader.split(' ')[1])}
     }
 
     @Get(":id")
     async getOne(@Param("id") labelId: string, @Headers('authorization') authHeader) {
-        return { label: await this.labelService.getAllLettersByLabelId(labelId, getUID(authHeader))};
+        try {
+            const uid = await validateAndGetUid(authHeader);
+            return {label: await this.labelService.getAllLettersByLabelId(labelId, uid)};
+        } catch (e) {
+            throw e;
+        }
     }
 
     @Post()
     async create(@Body() createLabelDto, @Headers("authorization") authHeader) {
-        return { label: await this.labelService.create({...createLabelDto.label, uid: getUID(authHeader)})}
+        try {
+            const uid = validateAndGetUid(authHeader);
+            return {label: await this.labelService.create({...createLabelDto.label, uid})}
+        } catch (e) {
+            throw e;
+        }
     }
 
     @Delete(":id")

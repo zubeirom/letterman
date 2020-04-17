@@ -1,12 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import {Storage} from "@google-cloud/storage";
 
 @Injectable()
 export class AppService {
-    getHello(): string {
-        return 'Hello World!';
-    }
+
+    storage = new Storage({
+        projectId: process.env.G_PROJECT_ID,
+        keyFilename: process.env.GOOGLE_CRED
+    });
+
+    bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
     
-    getUID(authHeader: string) {
-        return authHeader.split(' ')[1];
+    async streamImage(fileName) {
+        try {
+            return await this.bucket.file(fileName).download();
+        } catch (e) {
+            throw e;
+        }
     }
 }

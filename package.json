@@ -33,6 +33,7 @@
     "@sentry/node": "^5.9.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
+    "firebase-admin": "^8.10.0",
     "googleapis": "^48.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.5",

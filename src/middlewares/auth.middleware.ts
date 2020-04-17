@@ -1,13 +1,17 @@
 import {Injectable, NestMiddleware, UnauthorizedException} from '@nestjs/common';
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
+import {validateToken, getToken} from "../utils/index.utils";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-    use(req: Request, res: Response, next: Function) {
-        if(req.headers.authorization) {
+    async use(req: Request, res: Response, next: Function) {
+        try {
+            const token = getToken(req.headers.authorization);
+            await validateToken(token);
             next();
-        } else {
-            throw new UnauthorizedException('Unauthorized Request')
+        } catch (e) {
+            throw new UnauthorizedException('Unauthorized Request');
         }
+
     }
 }

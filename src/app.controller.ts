@@ -1,10 +1,20 @@
-import {Controller, Get, Post, Res, UploadedFile, Next, UseInterceptors} from '@nestjs/common';
-import {NextFunction, Response} from 'express';
+import {
+    Controller,
+    Get,
+    Post,
+    Res,
+    UploadedFile,
+    Next,
+    UseInterceptors,
+    Query,
+    UnauthorizedException
+} from '@nestjs/common';
+import { Response} from 'express';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Storage } from '@google-cloud/storage';
-import * as fs from 'fs';
 import {AppService} from './app.service';
 import {SentryInterceptor} from "./interceptors/sentry.interceptor";
+import {validateToken} from "./utils/index.utils";
 
 require('dotenv').config();
 
@@ -20,6 +30,17 @@ export class AppController {
     });
 
     bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
+
+    @Get('stream')
+    async streamImage(@Query("fileName") fileName: string , @Query('token') token: string, @Res() res: Response) {
+        try {
+            await validateToken(token);
+            const [file] = await this.appService.streamImage(fileName);
+            res.end(file, 'binary');
+        } catch (e) {
+            throw new UnauthorizedException('Unauthorized Request');
+        }
+    }
 
     @Get('.well-known/microsoft-identity-association.json')
     publisherDomain(@Res() res: Response) {
@@ -53,4 +74,5 @@ export class AppController {
 
         blobStream.end(file.buffer);
     }
+
 }

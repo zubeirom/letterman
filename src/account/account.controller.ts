@@ -1,7 +1,7 @@
 import {Controller, Get, Headers, Param, UseInterceptors} from '@nestjs/common';
 import {AccountService} from "./account.service";
-import {getUID} from "../utils/index.utils";
 import {SentryInterceptor} from "../interceptors/sentry.interceptor";
+import {validateAndGetUid} from "../utils/index.utils";
 
 @UseInterceptors(SentryInterceptor)
 @Controller('accounts')
@@ -10,6 +10,11 @@ export class AccountController {
 
     @Get('delete')
     async get(@Headers('authorization') authHeader) {
-        return this.accountService.deleteAccount(getUID(authHeader));
+        try {
+            const uid = await validateAndGetUid(authHeader);
+            return this.accountService.deleteAccount(uid);
+        } catch(e){
+            throw e;
+        }
     }
 }
