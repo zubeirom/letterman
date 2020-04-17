@@ -34,6 +34,7 @@ export class LetterService {
             });
             return newLetter.save();
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -49,6 +50,7 @@ export class LetterService {
             return this.letterModel.find({uid}).sort('-updatedAt').exec();
 
         } catch (e) {
+            console.error(e);
             throw e
         }
     }
@@ -60,6 +62,7 @@ export class LetterService {
             letter.imageUrl = await jwt.verify(letter.imageUrl, process.env.PRIVATE_KEY);
             return letter;
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -72,6 +75,7 @@ export class LetterService {
                 await letter.remove();
             }
         } catch (e) {
+            console.error(e);
             throw e;
         }
 
@@ -88,6 +92,7 @@ export class LetterService {
             letter.updatedAt = new Date();
             return letter.save();
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -100,6 +105,7 @@ export class LetterService {
             }
             return letter;
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }

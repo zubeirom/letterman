@@ -38,6 +38,7 @@ export class AppController {
             const [file] = await this.appService.streamImage(fileName);
             res.end(file, 'binary');
         } catch (e) {
+            console.error(e);
             throw new UnauthorizedException('Unauthorized Request');
         }
     }

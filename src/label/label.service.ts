@@ -14,6 +14,7 @@ export class LabelService {
         try {
             return this.labelModel.find({uid}).exec();
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -25,6 +26,7 @@ export class LabelService {
             // eslint-disable-next-line no-underscore-dangle
             return {_id: label._id, name: label.name, letters}
         } catch (e) {
+            console.error(e)
             throw e;
         }
     }
@@ -34,6 +36,7 @@ export class LabelService {
             const newLabel = new this.labelModel({...labelDto, createdAt: new Date(), updatedAt: new Date()});
             return newLabel.save();
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -42,6 +45,7 @@ export class LabelService {
         try {
             this.labelModel.deleteOne({_id: labelId}).exec();
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -50,6 +54,7 @@ export class LabelService {
         try {
             await this.labelModel.deleteMany({uid});
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }

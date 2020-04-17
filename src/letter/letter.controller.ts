@@ -9,8 +9,6 @@ import {
     Put,
     Query,
     UseInterceptors,
-    Res,
-    Req
 } from '@nestjs/common';
 import {LetterService} from "./letter.service";
 import {SentryInterceptor} from "../interceptors/sentry.interceptor";
@@ -28,6 +26,7 @@ export class LetterController {
             const uid = await validateAndGetUid(authHeader);
             return {letter: await this.letterService.create({...createLetterDto.letter, uid})}
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -38,6 +37,7 @@ export class LetterController {
             const uid = await validateAndGetUid(authHeader);
             return {letters: await this.letterService.get(uid, searchValue)};
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }

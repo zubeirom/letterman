@@ -20,6 +20,7 @@ export class LabelController {
             const uid = await validateAndGetUid(authHeader);
             return {label: await this.labelService.getAllLettersByLabelId(labelId, uid)};
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
@@ -30,6 +31,7 @@ export class LabelController {
             const uid = validateAndGetUid(authHeader);
             return {label: await this.labelService.create({...createLabelDto.label, uid})}
         } catch (e) {
+            console.error(e);
             throw e;
         }
     }
