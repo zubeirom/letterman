@@ -75,4 +75,9 @@ export class AppController {
         blobStream.end(file.buffer);
     }
 
+    @Get('ping')
+    ping() {
+        return 'Ok';
+    }
+
 }
