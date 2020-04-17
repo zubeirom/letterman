@@ -10,6 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
             await validateToken(token);
             next();
         } catch (e) {
+            console.error(e);
             throw new UnauthorizedException('Unauthorized Request');
         }
 
