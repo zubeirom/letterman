@@ -11,7 +11,13 @@ export class LabelController {
 
     @Get()
     async get(@Headers('authorization') authHeader) {
-        return {labels: await this.labelService.get(authHeader.split(' ')[1])}
+        try {
+            const uid = await validateAndGetUid(authHeader);
+            return {labels: await this.labelService.get(uid)}
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     @Get(":id")
@@ -28,7 +34,7 @@ export class LabelController {
     @Post()
     async create(@Body() createLabelDto, @Headers("authorization") authHeader) {
         try {
-            const uid = validateAndGetUid(authHeader);
+            const uid = await validateAndGetUid(authHeader);
             return {label: await this.labelService.create({...createLabelDto.label, uid})}
         } catch (e) {
             console.error(e);
