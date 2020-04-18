@@ -71,6 +71,7 @@ export class LetterService {
         try {
             const letter = await this.findLetter(letterId);
             if(letter) {
+                letter.imageUrl = await jwt.verify(letter.imageUrl, process.env.PRIVATE_KEY);
                 await this.bucket.file(letter.imageUrl).delete();
                 await letter.remove();
             }
