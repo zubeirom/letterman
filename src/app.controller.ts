@@ -9,9 +9,9 @@ import {
     Query,
     UnauthorizedException
 } from '@nestjs/common';
-import { Response} from 'express';
-import { FileInterceptor } from "@nestjs/platform-express";
-import { Storage } from '@google-cloud/storage';
+import {Response} from 'express';
+import {FileInterceptor} from "@nestjs/platform-express";
+import {Storage} from '@google-cloud/storage';
 import {AppService} from './app.service';
 import {SentryInterceptor} from "./interceptors/sentry.interceptor";
 import {validateToken} from "./utils/index.utils";
@@ -32,7 +32,7 @@ export class AppController {
     bucket = this.storage.bucket(process.env.G_BUCKET_NAME);
 
     @Get('stream')
-    async streamImage(@Query("fileName") fileName: string , @Query('token') token: string, @Res() res: Response) {
+    async streamImage(@Query("fileName") fileName: string, @Query('token') token: string, @Res() res: Response) {
         try {
             await validateToken(token);
             const [file] = await this.appService.streamImage(fileName);
@@ -77,7 +77,7 @@ export class AppController {
 
     @Get('ping')
     ping() {
-        return 'Ok';
+        return {success: true};
     }
 
 }
