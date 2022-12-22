@@ -35,7 +35,7 @@
     "dotenv": "^8.2.0",
     "firebase-admin": "^8.10.0",
     "googleapis": "^48.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.9.5",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
